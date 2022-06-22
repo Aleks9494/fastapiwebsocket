@@ -1,7 +1,7 @@
-import json
-import uvicorn
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import FileResponse
+import json
+import uvicorn
 
 
 app = FastAPI()
