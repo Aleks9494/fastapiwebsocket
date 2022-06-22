@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+    <body>
+        <h1 style="color: navy;">Test WebSocket</h1>
+        <form action="" onsubmit="sendData(event)">
+            <input type="text" id="messageText" autocomplete="off"  style="color: navy; background-color:lightblue;"/>
+            <button style="color: navy; background-color:lightblue;">Отправить</button>
+        </form>
+        <div id='messages'>
+        </div>
+        <script>
+        <!-- открываем web socket соединение -->
+            var ws = new WebSocket("ws://localhost:8000/ws");
+        <!-- socket получил данные, создаем пункт списка -->
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('p')
+                var msg = JSON.parse(event.data);
+                var content = document.createTextNode(msg.number + ': ' + msg.type + ': ' +  msg.text)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+            <!-- отправляем данные из формы в socket -->
+            function sendData(event) {
+                var input = document.getElementById("messageText")
+                var msg = {
+                    type: "message",
+                    text: input.value,
+                    };
+                ws.send(JSON.stringify(msg));
+                input.value = ''
+                event.preventDefault()
+            }
+        </script>
+    </body>
+</html>
